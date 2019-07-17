@@ -101,17 +101,20 @@ object main extends MillModule {
     def generatedSources = T {
       val dest = T.ctx().dest
       val version = publishVersion()
-      writeBuildInfo(dest, version)
+      val scala = scalaVersion()
+      writeBuildInfo(dest, version, scala)
       shared.generateCoreSources(dest)
       Seq(PathRef(dest))
     }
 
-    def writeBuildInfo(dir : os.Path, version : String) = {
+    def writeBuildInfo(dir : os.Path, version : String, scalaVersion : String) = {
       val code = s"""
         |package mill
         |
         |object BuildInfo {
         |  val millVersion = "$version"
+        |
+        |  val scalaVersion = "$scalaVersion"
         |}
       """.stripMargin.trim
 
